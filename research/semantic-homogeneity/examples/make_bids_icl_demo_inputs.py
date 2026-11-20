@@ -1,4 +1,4 @@
-"""Generate an invented dataset and matching predicted labels for smoke tests."""
+"""Generate an invented dataset and matching pseudo-labels for smoke tests."""
 
 import argparse
 import json
@@ -21,7 +21,7 @@ def main():
     (args.output / "examples.jsonl").write_text(
         "".join(json.dumps(example) + "\n" for example in examples), encoding="utf-8"
     )
-    np.savez(args.output / "predictions.npz", assigned_labels=[example["label"] for example in examples])
+    np.savez(args.output / "pseudo_labels.npz", pseudo_labels=[example["label"] for example in examples])
 
 
 if __name__ == "__main__":

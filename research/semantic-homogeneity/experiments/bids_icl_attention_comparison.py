@@ -1,4 +1,4 @@
-"""Compare attention diagnostics for predicted-label homogeneous and random batches."""
+"""Compare attention diagnostics for semantically homogeneous batches and the Random Batch baseline."""
 
 import argparse
 import random
@@ -6,7 +6,7 @@ from collections import defaultdict
 import numpy as np
 import torch
 import torch.nn.functional as F
-from common import add_input_options, load_inputs, load_model
+from bids_icl_inputs import add_input_options, load_inputs, load_model
 
 # -----------------------------
 # 0) Args
@@ -27,7 +27,7 @@ random.seed(args.seed)
 np.random.seed(args.seed)
 torch.manual_seed(args.seed)
 
-inputs_pool, true_pool, down_stream_label = load_inputs(args)
+inputs_pool, gold_labels, pseudo_labels = load_inputs(args)
 if len(inputs_pool) < args.batch_size:
     parser.error("The input file must contain at least one batch of examples.")
 tokenizer, model = load_model(args)
@@ -35,13 +35,13 @@ tokenizer, model = load_model(args)
 # -----------------------------
 # 5) Build homogeneous ordering by predicted label (your idea)
 # -----------------------------
-labels_unique = np.unique(down_stream_label)
+labels_unique = np.unique(pseudo_labels)
 label_to_idx = {lab: i for i, lab in enumerate(labels_unique)}
-order = np.argsort([label_to_idx[lab] for lab in down_stream_label])
+order = np.argsort([label_to_idx[lab] for lab in pseudo_labels])
 
 inputs_sorted = [inputs_pool[i] for i in order]
-pred_sorted = [down_stream_label[i] for i in order]
-true_sorted = [true_pool[i] for i in order]
+pseudo_labels_sorted = [pseudo_labels[i] for i in order]
+gold_labels_sorted = [gold_labels[i] for i in order]
 
 # -----------------------------
 # 6) Mechanism analysis (attention percentages + value alignment)
@@ -140,7 +140,7 @@ def analyze_batch(sentences, layer_idx, head_idx):
         "proj_attn_out_on_u": proj,
     }
 
-def sample_homogeneous_batches(inputs_sorted, pred_sorted, batch_size, num_batches):
+def sample_homogeneous_batches(inputs_sorted, pseudo_labels_sorted, batch_size, num_batches):
     """
     Take contiguous windows where predicted labels are identical.
     """
@@ -148,9 +148,9 @@ def sample_homogeneous_batches(inputs_sorted, pred_sorted, batch_size, num_batch
     n = len(inputs_sorted)
     i = 0
     while i < n and len(batches) < num_batches:
-        lab = pred_sorted[i]
+        lab = pseudo_labels_sorted[i]
         j = i
-        while j < n and pred_sorted[j] == lab:
+        while j < n and pseudo_labels_sorted[j] == lab:
             j += 1
         # segment [i, j) is homogeneous in predicted label
         seg_len = j - i
@@ -166,7 +166,7 @@ def sample_homogeneous_batches(inputs_sorted, pred_sorted, batch_size, num_batch
 from collections import defaultdict
 import random
 
-def build_true_label_homo_batches(texts, true_labels, batch_size, num_batches, seed=0):
+def build_gold_label_oracle_batches(texts, true_labels, batch_size, num_batches, seed=0):
     """
     Returns list[list[str]] of homogeneous batches where all labels are identical.
     """
@@ -210,7 +210,7 @@ def sample_random_batches(inputs_pool, batch_size, num_batches):
 # texts = small_inputs
 # true_labels = small_labels_true
 
-# homo_batches = build_true_label_homo_batches(
+# homogeneous_batches = build_gold_label_oracle_batches(
 #     texts=texts,
 #     true_labels=true_labels,
 #     batch_size=args.batch_size,
@@ -218,7 +218,7 @@ def sample_random_batches(inputs_pool, batch_size, num_batches):
 #     seed=args.seed
 # )
 
-# rand_batches = build_random_batches(
+# random_batches = build_random_batches(
 #     texts=texts,
 #     batch_size=args.batch_size,
 #     num_batches=args.num_batches,
@@ -229,16 +229,16 @@ def sample_random_batches(inputs_pool, batch_size, num_batches):
 # -----------------------------
 # 7) Run analysis on dataset-derived batches
 # -----------------------------
-homo_batches = sample_homogeneous_batches(inputs_sorted, pred_sorted, args.batch_size, args.num_batches)
-rand_batches = sample_random_batches(inputs_pool, args.batch_size, args.num_batches)
+homogeneous_batches = sample_homogeneous_batches(inputs_sorted, pseudo_labels_sorted, args.batch_size, args.num_batches)
+random_batches = sample_random_batches(inputs_pool, args.batch_size, args.num_batches)
 
-if len(homo_batches) == 0:
+if len(homogeneous_batches) == 0:
     raise RuntimeError(
         "Could not find any homogeneous segments of length >= batch_size "
         f"(batch_size={args.batch_size}). Try smaller batch_size or different dataset/seed."
     )
 
-print(f"[BATCH] homogeneous batches: {len(homo_batches)} | random batches: {len(rand_batches)}")
+print(f"[BATCH] homogeneous batches: {len(homogeneous_batches)} | random batches: {len(random_batches)}")
 
 def summarize(results):
     # results: list[dict]
@@ -253,11 +253,11 @@ homo_res = []
 rand_res = []
 
 print("\n[RUN] analyzing homogeneous batches ...")
-for b in homo_batches:
+for b in homogeneous_batches:
     homo_res.append(analyze_batch(b, args.layer_idx, args.head_idx))
 
 print("[RUN] analyzing random batches ...")
-for b in rand_batches:
+for b in random_batches:
     rand_res.append(analyze_batch(b, args.layer_idx, args.head_idx))
 
 homo_sum = summarize(homo_res)
@@ -266,11 +266,11 @@ rand_sum = summarize(rand_res)
 print("\n=== Mechanism summary (mean ± std) ===")
 print(f"Layer={args.layer_idx}, Head={args.head_idx}, batch_size={args.batch_size}, num_batches={args.num_batches}\n")
 
-print("Homogeneous (by predicted label):")
+print("Semantically homogeneous batches (grouped by pseudo-label):")
 for k, (m, s) in homo_sum.items():
     print(f"  {k:22s}: {m:.6f} ± {s:.6f}")
 
-print("\nRandom:")
+print("\nRandom Batch baseline:")
 for k, (m, s) in rand_sum.items():
     print(f"  {k:22s}: {m:.6f} ± {s:.6f}")
 

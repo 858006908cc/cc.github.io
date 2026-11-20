@@ -1,4 +1,4 @@
-"""Compare attention diagnostics for predicted-label homogeneous and random batches."""
+"""Compare attention diagnostics for semantically homogeneous batches and the Random Batch baseline."""
 
 import os
 import json
@@ -8,7 +8,7 @@ from collections import defaultdict
 import numpy as np
 import torch
 import torch.nn.functional as F
-from common import add_input_options, load_inputs, load_model
+from bids_icl_inputs import add_input_options, load_inputs, load_model
 from scipy import stats
 import matplotlib.pyplot as plt
 from typing import List, Dict, Tuple, Optional
@@ -23,8 +23,9 @@ parser.add_argument("--num_batches", type=int, default=30, help="how many batche
 parser.add_argument("--layer_idx", type=int, default=12)
 parser.add_argument("--head_idx", type=int, default=0)
 parser.add_argument("--max_sent_len", type=int, default=200, help="truncate each sentence to this many chars")
-parser.add_argument("--group-by", choices=("predicted", "gold"), default="predicted",
-                    help="Label source for homogeneous batches. Gold is an oracle diagnostic.")
+parser.add_argument("--group-by", type=lambda source: {"predicted": "pseudo-label", "gold": "gold-label"}.get(source, source),
+                    choices=("pseudo-label", "gold-label"), default="pseudo-label",
+                    help="Grouping signal. Gold labels provide an oracle condition.")
 parser.add_argument("--save_dir", type=str, default="results", help="Directory to save results")
 parser.add_argument("--test_layers", type=str, default="", help="Comma-separated layer indices to test (e.g., '6,12,18')")
 parser.add_argument("--min_label_frequency", type=int, default=5, help="Minimum examples per label for homogeneity")
@@ -40,7 +41,7 @@ torch.manual_seed(args.seed)
 # Create save directory
 os.makedirs(args.save_dir, exist_ok=True)
 
-inputs_pool, true_pool, down_stream_label = load_inputs(args)
+inputs_pool, gold_labels, pseudo_labels = load_inputs(args)
 if len(inputs_pool) < args.batch_size:
     parser.error("The input file must contain at least one batch of examples.")
 tokenizer, model = load_model(args)
@@ -81,9 +82,9 @@ def test_significance(homo_vals: np.ndarray, rand_vals: np.ndarray, metric_name:
 # -----------------------------
 # 6) Enhanced batch construction functions
 # -----------------------------
-def build_predicted_homo_batches(
+def build_semantically_homogeneous_batches(
     texts: List[str],
-    pred_labels: List[str],
+    grouping_labels: List[str],
     batch_size: int,
     num_batches: int,
     seed: int = 0,
@@ -97,7 +98,7 @@ def build_predicted_homo_batches(
 
     # Group indices by predicted label
     idx_by_label = defaultdict(list)
-    for i, label in enumerate(pred_labels):
+    for i, label in enumerate(grouping_labels):
         idx_by_label[label].append(i)
 
     # Filter labels with enough examples
@@ -122,7 +123,7 @@ def build_predicted_homo_batches(
 
     return batches
 
-def build_true_label_homo_batches(
+def build_gold_label_oracle_batches(
     texts: List[str],
     true_labels: List[str],
     batch_size: int,
@@ -397,24 +398,24 @@ def run_analysis_for_layer_head(
 
     # Build batches using enhanced functions
     try:
-        homo_batches = build_predicted_homo_batches(
+        homogeneous_batches = build_semantically_homogeneous_batches(
             texts=inputs_pool,
-            pred_labels=down_stream_label if args.group_by == "predicted" else true_pool,
+            grouping_labels=pseudo_labels if args.group_by == "pseudo-label" else gold_labels,
             batch_size=args.batch_size,
             num_batches=args.num_batches,
             seed=args.seed,
             min_frequency=args.min_label_frequency
         )
 
-        rand_batches = build_random_batches(
+        random_batches = build_random_batches(
             texts=inputs_pool,
             batch_size=args.batch_size,
             num_batches=args.num_batches,
             seed=args.seed + 999
         )
 
-        print(f"[BATCH] Homogeneous ({args.group_by}) batches: {len(homo_batches)}")
-        print(f"[BATCH] Random batches: {len(rand_batches)}")
+        print(f"[BATCH] Homogeneous ({args.group_by}) batches: {len(homogeneous_batches)}")
+        print(f"[BATCH] Random batches: {len(random_batches)}")
 
     except RuntimeError as error:
         raise RuntimeError(f"Batch construction failed: {error}") from error
@@ -424,13 +425,13 @@ def run_analysis_for_layer_head(
     rand_results = []
 
     print("\n[RUN] Analyzing homogeneous batches...")
-    for batch in homo_batches:
+    for batch in homogeneous_batches:
         result = analyze_batch(batch, layer_idx, head_idx)
         if result is not None:
             homo_results.append(result)
 
     print("[RUN] Analyzing random batches...")
-    for batch in rand_batches:
+    for batch in random_batches:
         result = analyze_batch(batch, layer_idx, head_idx)
         if result is not None:
             rand_results.append(result)
@@ -454,21 +455,21 @@ def run_analysis_for_layer_head(
             }
         return summary
 
-    homo_summary = summarize(homo_results)
-    rand_summary = summarize(rand_results)
+    homogeneous_batch_summary = summarize(homo_results)
+    random_batch_summary = summarize(rand_results)
 
     # Statistical significance testing
     significance_tests = {}
-    for metric in homo_summary.keys():
+    for metric in homogeneous_batch_summary.keys():
         homo_vals = np.array([r[metric] for r in homo_results])
         rand_vals = np.array([r[metric] for r in rand_results])
         significance_tests[metric] = test_significance(homo_vals, rand_vals, metric)
 
-    return homo_summary, rand_summary, significance_tests
+    return homogeneous_batch_summary, random_batch_summary, significance_tests
 
 def print_comparison_table(
-    homo_summary: Dict,
-    rand_summary: Dict,
+    homogeneous_batch_summary: Dict,
+    random_batch_summary: Dict,
     significance_tests: Dict,
     layer_idx: int,
     head_idx: int
@@ -486,10 +487,10 @@ def print_comparison_table(
     print("-" * 100)
 
     for metric, test in significance_tests.items():
-        homo_mean = homo_summary[metric]["mean"]
-        homo_std = homo_summary[metric]["std"]
-        rand_mean = rand_summary[metric]["mean"]
-        rand_std = rand_summary[metric]["std"]
+        homo_mean = homogeneous_batch_summary[metric]["mean"]
+        homo_std = homogeneous_batch_summary[metric]["std"]
+        rand_mean = random_batch_summary[metric]["mean"]
+        rand_std = random_batch_summary[metric]["std"]
 
         diff = homo_mean - rand_mean
         p_val = test["p_value"]
@@ -518,8 +519,8 @@ def print_comparison_table(
     print("  ✓ effective_positions:    Homogeneous < Random   (fewer effective tokens)")
 
 def save_results(
-    homo_summary: Dict,
-    rand_summary: Dict,
+    homogeneous_batch_summary: Dict,
+    random_batch_summary: Dict,
     significance_tests: Dict,
     layer_idx: int,
     head_idx: int,
@@ -528,11 +529,11 @@ def save_results(
     """Save results to JSON file."""
 
     results = {
-        "args": {key: value for key, value in vars(args).items() if key not in {"examples", "predictions", "save_dir"}},
+        "args": {key: value for key, value in vars(args).items() if key not in {"examples", "pseudo_labels", "save_dir"}},
         "layer_idx": layer_idx,
         "head_idx": head_idx,
-        "homo_summary": homo_summary,
-        "rand_summary": rand_summary,
+        "homogeneous_batch_summary": homogeneous_batch_summary,
+        "random_batch_summary": random_batch_summary,
         "significance_tests": significance_tests,
     }
 
@@ -547,7 +548,7 @@ def save_results(
             return None
         return value
 
-    filename = f"results_{args.dataset_name}_{args.group_by}_layer{layer_idx}_head{head_idx}_seed{args.seed}.json"
+    filename = f"bids_icl_homogeneity_{args.dataset_name}_{args.group_by}_layer{layer_idx}_head{head_idx}_seed{args.seed}.json"
     save_path = os.path.join(args.save_dir, filename)
     with open(save_path, "w", encoding="utf-8") as stream:
         json.dump(finite_json(results), stream, indent=2, allow_nan=False)
@@ -644,7 +645,7 @@ def create_summary_plot(
     plt.suptitle(f"Homogeneity Mechanism Analysis - {args.dataset_name} (seed={args.seed})", fontsize=16)
     plt.tight_layout()
 
-    save_path = os.path.join(args.save_dir, f"summary_plot_{args.dataset_name}_{args.group_by}_seed{args.seed}.png")
+    save_path = os.path.join(args.save_dir, f"bids_icl_homogeneity_summary_{args.dataset_name}_{args.group_by}_seed{args.seed}.png")
     plt.savefig(save_path, dpi=150, bbox_inches='tight')
     plt.close()
 
@@ -657,7 +658,7 @@ def main():
     """Main execution function."""
 
     print("\n" + "="*80)
-    print("HOMOGENEITY MECHANISM ANALYSIS")
+    print("BIDS-ICL SEMANTIC HOMOGENEITY DIAGNOSTICS")
     print("="*80)
     print(f"Dataset: {args.dataset_name}")
     print(f"Batch size: {args.batch_size}")
@@ -676,23 +677,23 @@ def main():
 
     # Run analysis for each layer
     for layer_idx in layers_to_test:
-        homo_summary, rand_summary, significance_tests = run_analysis_for_layer_head(
+        homogeneous_batch_summary, random_batch_summary, significance_tests = run_analysis_for_layer_head(
             layer_idx=layer_idx,
             head_idx=args.head_idx,
         )
 
-        if homo_summary and rand_summary:
+        if homogeneous_batch_summary and random_batch_summary:
             print_comparison_table(
-                homo_summary,
-                rand_summary,
+                homogeneous_batch_summary,
+                random_batch_summary,
                 significance_tests,
                 layer_idx,
                 args.head_idx
             )
 
             save_results(
-                homo_summary,
-                rand_summary,
+                homogeneous_batch_summary,
+                random_batch_summary,
                 significance_tests,
                 layer_idx,
                 args.head_idx,
@@ -702,8 +703,8 @@ def main():
             all_results.append({
                 "layer_idx": layer_idx,
                 "head_idx": args.head_idx,
-                "homo_summary": homo_summary,
-                "rand_summary": rand_summary,
+                "homogeneous_batch_summary": homogeneous_batch_summary,
+                "random_batch_summary": random_batch_summary,
                 "significance_tests": significance_tests
             })
 

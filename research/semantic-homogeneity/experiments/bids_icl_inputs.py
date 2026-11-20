@@ -12,9 +12,10 @@ def dataset_name(value):
 
 
 def add_input_options(parser):
-    parser.add_argument("--dataset_name", required=True, type=dataset_name, help="Name shown in reports.")
+    parser.add_argument("--dataset-name", "--dataset_name", required=True, type=dataset_name, help="Name shown in reports.")
     parser.add_argument("--examples", required=True, type=Path, help="JSONL file of examples.")
-    parser.add_argument("--predictions", required=True, type=Path, help="Aligned NPZ of predicted labels.")
+    parser.add_argument("--pseudo-labels", "--predictions", dest="pseudo_labels", required=True, type=Path,
+                        help="Aligned NPZ of encoder-predicted pseudo-labels.")
     parser.add_argument("--allow_pickle", action="store_true", help="Load object arrays from a trusted legacy NPZ.")
     parser.add_argument("--model", default="meta-llama/Meta-Llama-3-8B-Instruct",
                         help="Hugging Face model ID or local Llama checkpoint.")
@@ -36,11 +37,12 @@ def load_inputs(args):
                 raise ValueError(f"{args.examples}:{line_number}: {error}") from error
             texts.append(text)
             labels.append(label)
-    with np.load(args.predictions, allow_pickle=args.allow_pickle) as archive:
-        predictions = archive["assigned_labels"]
-    if predictions.ndim != 1 or len(predictions) != len(texts) or not texts:
-        raise ValueError("Provide a nonempty JSONL and one predicted label per row in the same order.")
-    return texts, labels, predictions
+    with np.load(args.pseudo_labels, allow_pickle=args.allow_pickle) as archive:
+        key = "pseudo_labels" if "pseudo_labels" in archive else "assigned_labels"
+        pseudo_labels = archive[key]
+    if pseudo_labels.ndim != 1 or len(pseudo_labels) != len(texts) or not texts:
+        raise ValueError("Provide a nonempty JSONL and one pseudo-label per row in the same order.")
+    return texts, labels, pseudo_labels
 
 
 def load_model(args):
