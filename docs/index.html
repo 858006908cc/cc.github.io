@@ -55,7 +55,14 @@
       .brand { padding: 0; border: 0; }
       nav { display: flex; flex-wrap: wrap; gap: .25rem 1rem; padding-top: .25rem; }
     }
+    #writing-posts h3 { margin-top: 1.4rem; }
+    #writing-posts img { max-width: 100%; height: auto; }
+    #writing-posts pre { overflow-x: auto; padding: .8rem; background: var(--sidebar); }
+    #writing-posts blockquote { margin-left: 0; padding-left: 1rem; border-left: 3px solid var(--line); }
+    .writing-actions { margin-top: 1.2rem; font-size: .95rem; }
   </style>
+  <script defer src="writing-assets/markdown-it.min.js"></script>
+  <script defer src="writing-assets/posts.js"></script>
 </head>
 <body id="top">
   <a class="skip" href="#main">Skip to content</a>
@@ -67,6 +74,7 @@
           <a href="#about">About</a>
           <a href="#directions">Research</a>
           <a href="#work">Publications</a>
+          <a href="#writing">Thoughts &amp; Posts</a>
           <a href="https://scholar.google.com/citations?user=1zZ4zYIAAAAJ&amp;hl=en">Google Scholar</a>
           <a href="https://github.com/858006908cc">GitHub</a>
         </nav>
@@ -171,6 +179,14 @@
           <p class="paper-links"><a href="https://ieeexplore.ieee.org/document/10605382/">Paper</a> <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:UeHWp8X0CEIC">Scholar record</a></p>
         </li>
         </ul>
+      </section>
+      <section id="writing" aria-labelledby="writing-title">
+        <h2 id="writing-title">Thoughts &amp; Posts</h2>
+        <p class="intro">Notes on research, things I’m learning, and whatever else I find interesting.</p>
+        <p id="writing-status" class="intro" role="status">No posts yet.</p>
+        <div id="writing-posts"></div>
+        <p class="writing-actions"><a href="https://github.com/858006908cc/cc.github.io/edit/main/docs/writing.md">Edit posts on GitHub</a></p>
+        <noscript><p><a href="https://github.com/858006908cc/cc.github.io/blob/main/docs/writing.md">Read posts on GitHub</a>.</p></noscript>
       </section>
       <footer>Cheng Chen</footer>
     </main>
