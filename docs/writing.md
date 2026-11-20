@@ -2,7 +2,7 @@
 Write your newest post below this comment. Use ## for each post title, then
 add an optional date and your text. Separate posts with a blank line and ---.
 
-Example:
+Example:sss
 
 ## A short title
 
@@ -10,3 +10,5 @@ Example:
 
 Write your post here.
 -->
+
+你好～
