@@ -1,216 +1,175 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Cheng Chen (Martin) researches trustworthy foundation models, learning with limited supervision, multimodal understanding, and AI governance.">
-<meta name="theme-color" content="#f5f7fa">
-<title>Cheng Chen | Trustworthy Foundation Models</title>
-<style>
-:root{color-scheme:light;--paper:#f5f7fa;--ink:#15223a;--muted:#476075;--blue:#2045bf;--line:#ccd6e4;--dark:#15254b}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--paper);color:var(--ink);font:1rem/1.65 system-ui,sans-serif}
-a{color:var(--blue);text-underline-offset:.23em}
-a:hover{text-decoration-thickness:2px}
-a:focus-visible{outline:3px solid #5278ef;outline-offset:5px}
-.wrap{width:min(70rem,calc(100% - 3rem));margin-inline:auto}
-.skip{position:absolute;left:1rem;top:-6rem;background:white;padding:.5rem 1rem;z-index:2}
-.skip:focus{top:1rem}
-header{border-bottom:1px solid var(--line)}
-header .wrap,footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding-block:1.15rem}
-.brand{font:700 1.3rem Georgia,serif;color:var(--ink);text-decoration:none}
-nav{display:flex;flex-wrap:wrap;gap:.35rem 1.4rem}
-nav a{font-size:.9rem;color:var(--ink);text-decoration:none}
-nav a:hover{text-decoration:underline}
-.hero{padding-block:clamp(3.5rem,9vw,7rem);display:grid;grid-template-columns:1.4fr 1fr;gap:clamp(2rem,6vw,5rem);align-items:center}
-.label,.venue{font-size:.875rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue)}
-h1,h2,h3,p{margin-top:0}
-h1,h2,h3{font-family:Georgia,serif;font-weight:400;line-height:1.12}
-h1{font-size:clamp(3.5rem,9vw,7.1rem);letter-spacing:-.065em;margin-bottom:1.15rem}
-h2{font-size:clamp(2.2rem,5vw,3.6rem);letter-spacing:-.04em;margin-bottom:1.5rem}
-h3{font-size:clamp(1.42rem,3vw,2rem);letter-spacing:-.02em;margin-bottom:.65rem}
-.lead{font-size:clamp(1.2rem,2.5vw,1.55rem);line-height:1.45;max-width:33ch;color:var(--dark)}
-.button{display:inline-block;border-radius:.25rem;background:var(--blue);color:white;padding:.65rem 1rem;font-weight:650;text-decoration:none}
-.button:hover{background:#173492}
-.panel{margin:0;padding:1.6rem;background:var(--dark);color:white;border-radius:.55rem;background-image:radial-gradient(#435986 1px,transparent 1px);background-size:16px 16px}
-.panel figcaption{font-size:.9rem;color:#e2eaff;margin-bottom:1.15rem;font-weight:650}
-.panel ol{margin:0;padding:0;list-style:none;display:grid;gap:1.15rem}
-.panel li{background:#203664;border:1px solid #7186b5;border-radius:.25rem;padding:.55rem .85rem;position:relative}
-.panel li+li::before{content:"";height:1.15rem;width:1px;background:#9cb4ff;position:absolute;left:1.1rem;bottom:100%}
-.panel li:last-child{background:#dce6ff;color:#142750;border-color:#dce6ff}
-section{scroll-margin-top:1rem}
-.work{border-top:1px solid var(--line);padding-block:2.75rem 3.5rem}
-article{display:grid;grid-template-columns:9.5rem 1fr;gap:.4rem 1.4rem;padding-block:1.55rem;border-top:1px solid var(--line)}
-article p,.direction p{color:var(--muted);max-width:68ch;margin-bottom:.65rem}
-.venue{padding-top:.2rem}
-.publication-intro{color:var(--muted);margin-top:-.75rem;margin-bottom:1.4rem}
-.authors{font-size:.9rem}
-.links{display:flex;gap:1.15rem;flex-wrap:wrap;font-weight:650}
-.directions{background:#e8eef9;padding-block:3rem 3.6rem}
-.direction-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.6rem}
-.direction{border-top:2px solid #7087c4;padding-top:1rem}
-.direction h3{font-size:1.45rem}
-footer{border-top:1px solid var(--line)}
-footer p{margin:0}
-@media(max-width:700px){.hero,.direction-grid{grid-template-columns:1fr}.hero{gap:2rem}.panel{max-width:30rem}article{grid-template-columns:1fr}.wrap{width:calc(100% - 2rem)}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Cheng Chen (Martin) researches trustworthy foundation models, learning with limited supervision, multimodal understanding, and AI governance.">
+  <title>Cheng Chen (Martin) | Research Homepage</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #24292d;
+      --navy: #233d59;
+      --link: #245783;
+      --muted: #4e5b65;
+      --line: #ced7df;
+      --sidebar: #f1f4f7;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: #fff; font: 1rem/1.55 Georgia, 'Times New Roman', serif; }
+    a { color: var(--link); text-underline-offset: .2em; }
+    a:hover { color: var(--navy); text-decoration-thickness: 2px; }
+    a:focus-visible { outline: 2px solid var(--link); outline-offset: 4px; }
+    .skip { position: absolute; top: -5rem; left: 1rem; padding: .3rem .7rem; background: white; }
+    .skip:focus { top: 1rem; z-index: 1; }
+    .layout { display: grid; grid-template-columns: 12rem minmax(0, 53rem); min-height: 100vh; }
+    .sidebar { background: var(--sidebar); border-right: 1px solid var(--line); padding: 2rem 1.15rem; }
+    .sidebar-inner { position: sticky; top: 2rem; }
+    .brand { display: block; color: var(--navy); font-weight: bold; font-size: 1.12rem; text-decoration: none; border-bottom: 1px solid var(--line); padding-bottom: .55rem; }
+    nav { display: grid; gap: .4rem; padding-top: .65rem; }
+    nav a { text-decoration: none; }
+    nav a:hover { text-decoration: underline; }
+    main { padding: 2rem clamp(1.25rem, 4vw, 3.5rem) 1.5rem; }
+    header { border-bottom: 2px solid var(--navy); padding-bottom: 1.3rem; }
+    h1, h2, h3 { color: var(--navy); line-height: 1.25; }
+    h1 { font-size: clamp(2.15rem, 5vw, 3rem); margin: 0 0 .35rem; }
+    h1 span { font-size: .64em; font-weight: normal; }
+    h2 { font-size: 1.38rem; margin: 0 0 .85rem; padding-bottom: .35rem; border-bottom: 1px solid var(--line); }
+    h3 { margin: 0 0 .18rem; font-size: 1.04rem; }
+    p { margin: 0 0 .65rem; }
+    section { margin-top: 1.75rem; scroll-margin-top: 1rem; }
+    ul { margin: 0; padding-left: 1.3rem; }
+    .research li { margin-bottom: .5rem; }
+    .publications li { margin-bottom: 1.1rem; }
+    .publications p { margin: 0; }
+    .profile-links, .paper-links { display: flex; flex-wrap: wrap; gap: .2rem .9rem; }
+    .profile-links { margin: .65rem 0 0; }
+    .paper-links { font-size: .92rem; }
+    .paper-note, .intro { color: var(--muted); }
+    footer { border-top: 1px solid var(--line); margin-top: 1.8rem; padding-top: .6rem; color: var(--muted); font-size: .9rem; }
+    @media (max-width: 650px) {
+      .layout { display: block; }
+      .sidebar { border-right: 0; border-bottom: 1px solid var(--line); padding: .8rem 1.25rem; }
+      .sidebar-inner { position: static; }
+      .brand { padding: 0; border: 0; }
+      nav { display: flex; flex-wrap: wrap; gap: .25rem 1rem; padding-top: .25rem; }
+    }
+  </style>
 </head>
 <body id="top">
-<a class="skip" href="#main">Skip to content</a>
-<header>
-  <div class="wrap">
-    <a class="brand" href="#top">Cheng Chen</a>
-    <nav aria-label="Main navigation">
-      <a href="#work">Publications</a>
-      <a href="#directions">Research directions</a>
-      <a href="https://scholar.google.com/citations?user=1zZ4zYIAAAAJ&amp;hl=en">Google Scholar</a>
-      <a href="https://github.com/858006908cc">GitHub</a>
-    </nav>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a class="brand" href="#top">Cheng Chen</a>
+        <nav aria-label="Main navigation">
+          <a href="#about">About</a>
+          <a href="#directions">Research</a>
+          <a href="#work">Publications</a>
+          <a href="https://scholar.google.com/citations?user=1zZ4zYIAAAAJ&amp;hl=en">Google Scholar</a>
+          <a href="https://github.com/858006908cc">GitHub</a>
+        </nav>
+      </div>
+    </aside>
+    <main id="main">
+      <header>
+        <h1>Cheng Chen <span>(Martin)</span></h1>
+        <p>Centre for Frontier AI Research (CFAR)<br>Agency for Science, Technology and Research (A*STAR)</p>
+        <p class="profile-links"><a href="https://scholar.google.com/citations?user=1zZ4zYIAAAAJ&amp;hl=en">Google Scholar</a><a href="https://github.com/858006908cc">GitHub</a></p>
+      </header>
+      <section id="about" aria-labelledby="about-title">
+        <h2 id="about-title">About</h2>
+        <p>I study how foundation models can learn from limited feedback, adapt to people’s preferences, and be evaluated when reliable labels are scarce.</p>
+      </section>
+      <section id="directions" aria-labelledby="directions-title">
+        <h2 id="directions-title">Research directions</h2>
+        <ul class="research">
+        <li><strong>Trustworthy language models.</strong> Personalize LLMs from a few preference examples and use agreement across models to evaluate agent-generated annotations without reference labels.</li>
+        <li><strong>Learning with limited supervision.</strong> Use self-teaching, in-context learning, and knowledge distillation when labels are scarce, noisy, or incomplete.</li>
+        <li><strong>Model attribution and multimodal learning.</strong> Trace predictions back to influential training examples and study how models understand images, video, and motion.</li>
+        <li><strong>Agentic AI and governance.</strong> Study how to evaluate the fairness and accountability of AI agents in real settings, including digital labor platforms.</li>
+        </ul>
+      </section>
+      <section id="work" aria-labelledby="work-title">
+        <h2 id="work-title">Publications and preprints</h2>
+        <p class="intro">Publication list from <a href="https://scholar.google.com/citations?user=1zZ4zYIAAAAJ&amp;hl=en">Google Scholar</a>.</p>
+        <ul class="publications">
+        <li>
+          <h3><a href="https://openreview.net/forum?id=y5bJXgBx6a">Semantic Homogeneity As Demonstration: Batch-Structured Semi-Supervised In-Context Learning for Natural Language Understanding</a></h3>
+          <p><strong>Cheng Chen</strong>, Yuangang Pan, Ivor Tsang. <em>CPAL 2026 · Proceedings.</em></p>
+          
+          <p class="paper-links"><a href="https://openreview.net/forum?id=y5bJXgBx6a">Paper</a> <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:hqOjcs7Dif8C">Scholar record</a></p>
+        </li>
+        <li>
+          <h3><a href="https://openreview.net/forum?id=jugY302BAh">Verification and Co-Alignment via Heterogeneous Consistency for Preference-Aligned LLM Annotations</a></h3>
+          <p><strong>Cheng Chen</strong>, Haiyan Yin, Ivor W. Tsang. <em>ICLR 2026 · Poster.</em></p>
+          <p class="paper-note">Uses agreement between an LLM and a task-specific encoder to assess annotation reliability. Embeddings help recalibrate annotations where the models disagree.</p>
+          <p class="paper-links"><a href="https://openreview.net/forum?id=jugY302BAh">Paper</a> <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:UebtZRa9Y70C">Scholar record</a> <a href="https://github.com/858006908cc/VERIFICATION-AND-CO-ALIGNMENT-ICLR26">Code</a></p>
+        </li>
+        <li>
+          <h3><a href="https://arxiv.org/abs/2610.33478">MarineLife-16K: An Attribute-Rich Video-Text Dataset for Motion-Aware Marine Video Understanding</a></h3>
+          <p>Quang-Trung Truong, Thanh-Nghia Nguyen, Phu-Phong Vo, Jaeyeon Kim, <strong>Cheng Chen</strong>, Jie Zhang, Binh-Son Hua, Duc Thanh Nguyen, Ivor Tsang, Sai-Kit Yeung. <em>WACV 2027 · 2026 preprint.</em></p>
+          
+          <p class="paper-links"><a href="https://arxiv.org/abs/2610.33478">Paper</a> <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:0EnyYjriUFMC">Scholar record</a></p>
+        </li>
+        <li>
+          <h3><a href="https://doi.org/10.1016/j.patcog.2025.112438">Layer-wise correlation and attention discrepancy distillation for semantic segmentation</a></h3>
+          <p>J Gou, K Chen, <strong>C Chen</strong>, W Ou, X Luo, Z Yi. <em>Pattern Recognition · 2026 issue.</em></p>
+          
+          <p class="paper-links"><a href="https://doi.org/10.1016/j.patcog.2025.112438">Paper</a> <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:eQOLeE2rZwMC">Scholar record</a></p>
+        </li>
+        <li>
+          <h3><a href="https://aclanthology.org/2025.emnlp-main.933/">RRInf: Efficient Influence Function Estimation via Ridge Regression for Large Language Models and Text-to-Image Diffusion Models</a></h3>
+          <p>Z Tu, <strong>C Chen</strong>*, Y Du. <em>EMNLP 2025.</em></p>
+          
+          <p class="paper-links"><a href="https://aclanthology.org/2025.emnlp-main.933/">Paper</a> <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:roLk4NBRz8UC">Scholar record</a></p>
+        </li>
+        <li>
+          <h3><a href="https://openreview.net/forum?id=njE3swFBMc">Unlearning Misalignment for Personalized LLM Adaptation via Instance-Response-Dependent Discrepancies</a></h3>
+          <p><strong>Cheng Chen</strong>, Atsushi Nitanda, Ivor Tsang. <em>TMLR 2025.</em></p>
+          <p class="paper-note">Introduces Consistent Marginalization, which learns from a small set of preference examples to adapt responses to an individual user and context.</p>
+          <p class="paper-links"><a href="https://openreview.net/forum?id=njE3swFBMc">Paper</a> <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:WF5omc3nYNoC">Scholar record</a> <a href="https://github.com/858006908cc/Consistent-Marginalization">Code</a></p>
+        </li>
+        <li>
+          <h3><a href="https://arxiv.org/abs/2509.08809">Evaluating LLMs Without Oracle Feedback: Agentic Annotation Evaluation Through Unsupervised Consistency Signals</a></h3>
+          <p><strong>C Chen</strong>, H Yin, I Tsang. <em>arXiv · 2025 preprint.</em></p>
+          
+          <p class="paper-links"><a href="https://arxiv.org/abs/2509.08809">Paper</a> <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:5nxA0vEk-isC">Scholar record</a></p>
+        </li>
+        <li>
+          <h3><a href="https://openreview.net/pdf?id=QlEfwyq9rx">Position: Can Agentic AI Make Gig Economy More Fair?</a></h3>
+          <p><strong>C Chen</strong>, CW Cheong, J Li, WK Cheung, I Tsang. <em>2025 · Position paper.</em></p>
+          
+          <p class="paper-links"><a href="https://openreview.net/pdf?id=QlEfwyq9rx">Paper</a> <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:ufrVoPGSRksC">Scholar record</a></p>
+        </li>
+        <li>
+          <h3><a href="https://ecmlpkdd-storage.s3.eu-central-1.amazonaws.com/preprints/2024/lncs14944/lncs14944108.pdf">Low-hanging fruit: Knowledge distillation from noisy teachers for open domain spoken language understanding</a></h3>
+          <p><strong>C Chen</strong>, B Xing, IW Tsang. <em>ECML PKDD 2024.</em></p>
+          
+          <p class="paper-links"><a href="https://ecmlpkdd-storage.s3.eu-central-1.amazonaws.com/preprints/2024/lncs14944/lncs14944108.pdf">Paper</a> <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:IjCSPb-OGe4C">Scholar record</a></p>
+        </li>
+        <li>
+          <h3><a href="https://openreview.net/notes/edits/attachment?id=FZR4qpTuUS&amp;name=pdf">Self-Teaching Prompting for Multi-Intent Learning with Limited Supervision</a></h3>
+          <p><strong>C Chen</strong>, I Tsang. <em>ICLR 2024 · Tiny Papers.</em></p>
+          
+          <p class="paper-links"><a href="https://openreview.net/notes/edits/attachment?id=FZR4qpTuUS&amp;name=pdf">Paper</a> <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:2osOgNQ5qMEC">Scholar record</a></p>
+        </li>
+        <li>
+          <h3><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:qjMakFHDy7sC">Fine-Grained Partial Label Learning</a></h3>
+          <p><strong>C Chen</strong>, Y Lyu, X Yu, J Li, IW Tsang. <em>IEEE CAI 2024 · Spotlight.</em></p>
+          
+          <p class="paper-links"><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:qjMakFHDy7sC">Scholar record</a></p>
+        </li>
+        <li>
+          <h3><a href="https://ieeexplore.ieee.org/document/10605382/">Local and global guidance for multi-complementary label learning</a></h3>
+          <p><strong>C Chen</strong>, IW Tsang. <em>IEEE CAI 2024.</em></p>
+          
+          <p class="paper-links"><a href="https://ieeexplore.ieee.org/document/10605382/">Paper</a> <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:UeHWp8X0CEIC">Scholar record</a></p>
+        </li>
+        </ul>
+      </section>
+      <footer>Cheng Chen</footer>
+    </main>
   </div>
-</header>
-<main id="main">
-  <section class="hero wrap" aria-labelledby="name">
-    <div>
-      <p class="label">Centre for Frontier AI Research · A*STAR</p>
-      <h1 id="name">Cheng Chen</h1>
-      <p class="lead">I’m Cheng Chen (Martin). I study how foundation models can learn from limited feedback, adapt to people’s preferences, and be evaluated when reliable labels are scarce.</p>
-      <a class="button" href="#work">Browse publications</a>
-    </div>
-    <figure class="panel">
-      <figcaption>How heterogeneous co-alignment works</figcaption>
-      <ol>
-        <li>Start with examples of user preferences</li>
-        <li>Compare LLM and encoder annotations</li>
-        <li>Recalibrate where the models disagree</li>
-      </ol>
-    </figure>
-  </section>
-  <section class="work wrap" id="work" aria-labelledby="work-title">
-    <h2 id="work-title">Publications</h2>
-    <p class="publication-intro">Publications and preprints listed on <a href="https://scholar.google.com/citations?user=1zZ4zYIAAAAJ&amp;hl=en">Google Scholar</a>.</p>
-    <article>
-      <div class="venue">CPAL 2026 · Proceedings</div>
-      <div>
-        <h3>Semantic Homogeneity As Demonstration: Batch-Structured Semi-Supervised In-Context Learning for Natural Language Understanding</h3>
-        <p class="authors"><strong>Cheng Chen</strong>, Yuangang Pan, Ivor Tsang</p>
-        
-        <div class="links"><a href="https://openreview.net/forum?id=y5bJXgBx6a">Paper</a><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:hqOjcs7Dif8C">Scholar record</a></div>
-      </div>
-    </article>
-    <article>
-      <div class="venue">ICLR 2026 · Poster</div>
-      <div>
-        <h3>Verification and Co-Alignment via Heterogeneous Consistency for Preference-Aligned LLM Annotations</h3>
-        <p class="authors"><strong>Cheng Chen</strong>, Haiyan Yin, Ivor W. Tsang</p>
-        <p>Uses agreement between an LLM and a task-specific encoder to assess annotation reliability. Embeddings help recalibrate annotations where the models disagree.</p>
-        <div class="links"><a href="https://openreview.net/forum?id=jugY302BAh">Paper</a><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:UebtZRa9Y70C">Scholar record</a><a href="https://github.com/858006908cc/VERIFICATION-AND-CO-ALIGNMENT-ICLR26">Code</a></div>
-      </div>
-    </article>
-    <article>
-      <div class="venue">WACV 2027 · 2026 preprint</div>
-      <div>
-        <h3>MarineLife-16K: An Attribute-Rich Video-Text Dataset for Motion-Aware Marine Video Understanding</h3>
-        <p class="authors">Quang-Trung Truong, Thanh-Nghia Nguyen, Phu-Phong Vo, Jaeyeon Kim, <strong>Cheng Chen</strong>, Jie Zhang, Binh-Son Hua, Duc Thanh Nguyen, Ivor Tsang, Sai-Kit Yeung</p>
-        
-        <div class="links"><a href="https://arxiv.org/abs/2610.33478">Paper</a><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:0EnyYjriUFMC">Scholar record</a></div>
-      </div>
-    </article>
-    <article>
-      <div class="venue">Pattern Recognition · 2026 issue</div>
-      <div>
-        <h3>Layer-wise correlation and attention discrepancy distillation for semantic segmentation</h3>
-        <p class="authors">J Gou, K Chen, <strong>C Chen</strong>, W Ou, X Luo, Z Yi</p>
-        
-        <div class="links"><a href="https://doi.org/10.1016/j.patcog.2025.112438">Paper</a><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:eQOLeE2rZwMC">Scholar record</a></div>
-      </div>
-    </article>
-    <article>
-      <div class="venue">EMNLP 2025</div>
-      <div>
-        <h3>RRInf: Efficient Influence Function Estimation via Ridge Regression for Large Language Models and Text-to-Image Diffusion Models</h3>
-        <p class="authors">Z Tu, <strong>C Chen</strong>*, Y Du</p>
-        
-        <div class="links"><a href="https://aclanthology.org/2025.emnlp-main.933/">Paper</a><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:roLk4NBRz8UC">Scholar record</a></div>
-      </div>
-    </article>
-    <article>
-      <div class="venue">TMLR 2025</div>
-      <div>
-        <h3>Unlearning Misalignment for Personalized LLM Adaptation via Instance-Response-Dependent Discrepancies</h3>
-        <p class="authors"><strong>Cheng Chen</strong>, Atsushi Nitanda, Ivor Tsang</p>
-        <p>Introduces Consistent Marginalization, which learns from a small set of preference examples to adapt responses to an individual user and context.</p>
-        <div class="links"><a href="https://openreview.net/forum?id=njE3swFBMc">Paper</a><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:WF5omc3nYNoC">Scholar record</a><a href="https://github.com/858006908cc/Consistent-Marginalization">Code</a></div>
-      </div>
-    </article>
-    <article>
-      <div class="venue">arXiv · 2025 preprint</div>
-      <div>
-        <h3>Evaluating LLMs Without Oracle Feedback: Agentic Annotation Evaluation Through Unsupervised Consistency Signals</h3>
-        <p class="authors"><strong>C Chen</strong>, H Yin, I Tsang</p>
-        
-        <div class="links"><a href="https://arxiv.org/abs/2509.08809">Paper</a><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:5nxA0vEk-isC">Scholar record</a></div>
-      </div>
-    </article>
-    <article>
-      <div class="venue">2025 · Position paper</div>
-      <div>
-        <h3>Position: Can Agentic AI Make Gig Economy More Fair?</h3>
-        <p class="authors"><strong>C Chen</strong>, CW Cheong, J Li, WK Cheung, I Tsang</p>
-        
-        <div class="links"><a href="https://openreview.net/pdf?id=QlEfwyq9rx">Paper</a><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:ufrVoPGSRksC">Scholar record</a></div>
-      </div>
-    </article>
-    <article>
-      <div class="venue">ECML PKDD 2024</div>
-      <div>
-        <h3>Low-hanging fruit: Knowledge distillation from noisy teachers for open domain spoken language understanding</h3>
-        <p class="authors"><strong>C Chen</strong>, B Xing, IW Tsang</p>
-        
-        <div class="links"><a href="https://ecmlpkdd-storage.s3.eu-central-1.amazonaws.com/preprints/2024/lncs14944/lncs14944108.pdf">Paper</a><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:IjCSPb-OGe4C">Scholar record</a></div>
-      </div>
-    </article>
-    <article>
-      <div class="venue">ICLR 2024 · Tiny Papers</div>
-      <div>
-        <h3>Self-Teaching Prompting for Multi-Intent Learning with Limited Supervision</h3>
-        <p class="authors"><strong>C Chen</strong>, I Tsang</p>
-        
-        <div class="links"><a href="https://openreview.net/notes/edits/attachment?id=FZR4qpTuUS&amp;name=pdf">Paper</a><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:2osOgNQ5qMEC">Scholar record</a></div>
-      </div>
-    </article>
-    <article>
-      <div class="venue">IEEE CAI 2024 · Spotlight</div>
-      <div>
-        <h3>Fine-Grained Partial Label Learning</h3>
-        <p class="authors"><strong>C Chen</strong>, Y Lyu, X Yu, J Li, IW Tsang</p>
-        
-        <div class="links"><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:qjMakFHDy7sC">Scholar record</a></div>
-      </div>
-    </article>
-    <article>
-      <div class="venue">IEEE CAI 2024</div>
-      <div>
-        <h3>Local and global guidance for multi-complementary label learning</h3>
-        <p class="authors"><strong>C Chen</strong>, IW Tsang</p>
-        
-        <div class="links"><a href="https://ieeexplore.ieee.org/document/10605382/">Paper</a><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;oe=ASCII&amp;user=1zZ4zYIAAAAJ&amp;pagesize=100&amp;citation_for_view=1zZ4zYIAAAAJ:UeHWp8X0CEIC">Scholar record</a></div>
-      </div>
-    </article>
-  </section>
-  <section class="directions" id="directions" aria-labelledby="directions-title">
-    <div class="wrap">
-      <h2 id="directions-title">Research directions</h2>
-      <div class="direction-grid">
-        <div class="direction"><h3>Trustworthy language models</h3><p>Personalize LLMs from a few preference examples and use agreement across models to evaluate agent-generated annotations without reference labels.</p></div>
-        <div class="direction"><h3>Learning with limited supervision</h3><p>Use self-teaching, in-context learning, and knowledge distillation when labels are scarce, noisy, or incomplete.</p></div>
-        <div class="direction"><h3>Model attribution and multimodal learning</h3><p>Trace predictions back to influential training examples and study how models understand images, video, and motion.</p></div>
-        <div class="direction"><h3>Agentic AI and governance</h3><p>Study how to evaluate the fairness and accountability of AI agents in real settings, including digital labor platforms.</p></div>
-      </div>
-    </div>
-  </section>
-</main>
-<footer><div class="wrap"><p>Cheng Chen</p><a href="https://github.com/858006908cc?tab=repositories">Browse GitHub repositories</a></div></footer>
 </body>
 </html>
