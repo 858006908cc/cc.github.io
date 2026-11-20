@@ -1,0 +1,3 @@
+{"id":"s1","text":"Play a jazz song","labels":["play_music"]}
+{"id":"s2","text":"Set an alarm for seven","labels":["set_alarm"]}
+{"id":"s3","text":"Play a song and set an alarm","labels":["play_music","set_alarm"]}
